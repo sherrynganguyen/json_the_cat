@@ -1,25 +1,27 @@
 const request = require('request');
 const urlExists = require('url-exists');
 
-const cat = process.argv.slice(2)[0].substring(0,3);
-let web = 'https://api.thectapi.com/v1/breeds/search';
+const cat = process.argv[2].substring(0,3);
+let web = 'https://api.thecatapi.com/v1/breeds/search';
 web = web.concat('?q=', cat);
-urlExists(web, function(err, exists) {
-  if (exists === false) console.log('URL does not exist');
-  else {
+
+// const fetchBreedDescription = function(breedName, callback) {
+
+// }
+
     request(web, (error, message, body) => {
-      if (error) {
-        console.log('The requested breed is not found.');
-      } else {
-        if (body === "[]") {
-          console.log('The request breed is not found.');
-        } else {
-          body = body.split("[").join("");
-          body = body.split("]").join("");
-          const data = JSON.parse(body);
-          console.log(data.description);
-        }
-      }
+      urlExists(web, function(err, exists) {
+        if (exists === false) console.log('URL does not exist');
+        else {
+          if (body === "[]") {
+              console.log('The request breed is not found.');
+            } else {
+              // body = body.substring(1,body.length -2);
+              const data = JSON.parse(body);
+              for (let i = 0; i < data.length; i++) {console.log(data[i].description);}
+            }
+        }  
     });
-  }
 });
+
+// module.exports = {fetchBreedDescription};
